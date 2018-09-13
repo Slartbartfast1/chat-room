@@ -5,6 +5,13 @@ var io = require('socket.io')(http);
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
 });
+app.get('/signup', function(req, res){
+    res.sendFile(__dirname + '/signup.html');
+});
+app.get('/signin', function(req, res){
+    res.sendFile(__dirname + '/signin.html');
+});
+
 io.on('connection', function(socket){
     console.log('a user connected');
     socket.on('disconnect', function(){
