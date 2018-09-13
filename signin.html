@@ -55,17 +55,40 @@
 <body>
 
 <div class="container">
+    <h2 class="form-signin-heading text-center">登陆</h2>
     <form class="form-signin" action="" method="post" enctype="multipart/form-data">
-        <h2 class="form-signin-heading text-center">登陆</h2>
         <label for="inputEmail" class="sr-only">邮箱</label>
-        <input type="text" id="inputEmail" class="form-control" placeholder="邮箱"  required autofocus>
+        <input type="text" id="inputEmail" class="form-control" placeholder="邮箱" name="userid" required autofocus>
         <label for="inputPassword" class="sr-only">密码</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="密码" required>
-            <a href="signup" class="">没有账号?</a>
+        <input type="password" id="inputPassword" class="form-control" placeholder="密码" name="password" required>
+            <a href="signup" class="">没有账号?点击注册</a>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Go</button>
     </form>
 
 </div>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $('.form-signin').on('submit',function(e){
+        e.preventDefault();
+        var formData=$(this).serialize()
+        $.ajax({
+            url:'/signin',
+            type:'post',
+            data:formData,
+            dataType:'json',
+            success:function(data){
+                var err_code=data.err_code;
+                if(err_code===0){
+                    alert('登陆成功')
+                }else if(err_code===1){
+                    alert('邮箱或密码错误')
+                }else if(err_code===500){
+                    alert('服务端繁忙,请稍后再试')
+                }
+
+            }
+        });
+    })
+</script>
 </body>
 </html>
