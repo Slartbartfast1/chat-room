@@ -54,7 +54,7 @@
       position:absolute;
         z-index: 999;
         color:grey;
-        top:280px;
+        top:215px;
         right:30px;
         cursor: pointer;
     }
@@ -68,19 +68,20 @@
 <body>
 
 <div class="container">
-
+    <h2 class="form-signup-heading text-center">注册</h2>
     <form class="form-signup" method="post" enctype="multipart/form-data">
-        <h2 class="form-signup-heading text-center">注册</h2>
         <label for="inputEmail" >邮箱:</label>
         <input type="text" id="inputEmail" class="form-control" placeholder="邮箱"  name="userid" required autofocus>
         <label for="username" >用户名:</label>
         <input type="text" id="username" class="form-control" placeholder="用户名"  name="username" required>
         <label for="inputPassword" >密码:</label>
-        <input type="password" id="inputPassword" class="form-control pass" placeholder="请输入密码" required> <span id="eye" class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+        <input type="password" id="inputPassword" class="form-control pass" placeholder="请输入密码" required>
+        <span id="eye" class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+        <label for="inputPasswordAgain" >再次输入密码:</label>
         <input type="password" id="inputPasswordAgain" class="form-control pass" placeholder="再次输入密码" name="password" required>
+        <a href="signin">已有账号?点击登陆</a>
         <button class="btn btn-lg btn-primary btn-block" type="submit" disabled>注册</button>
     </form>
-
 
 </div>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
