@@ -17,6 +17,7 @@
     }
 
     .form-signin {
+        position: relative;
         max-width: 330px;
         padding: 15px;
         margin: 0 auto;
@@ -49,18 +50,26 @@
         border-top-left-radius: 0;
         border-top-right-radius: 0;
     }
+    #eye{
+      position:absolute;
+        z-index: 999;
+        color:grey;
+        top:150px;
+        right:30px;
+        cursor: pointer;
+    }
 </style>
 <body>
 
 <div class="container">
 
-    <form class="form-signin">
+    <form class="form-signin action=" method="post" enctype="multipart/form-data">
         <h2 class="form-signin-heading text-center">注册</h2>
         <label for="inputEmail" class="sr-only">邮箱</label>
-        <input type="text" id="inputEmail" class="form-control" placeholder="邮箱" required autofocus>
+        <input type="text" id="inputEmail" class="form-control" placeholder="邮箱"  name="usename" required autofocus>
         <label for="inputPassword" class="sr-only">密码</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="密码" required>
-        <input type="password" id="inputPasswordAgain" class="form-control" placeholder="再次输入密码" required>
+        <input type="password" id="inputPassword" class="form-control pass" placeholder="请输入密码" required> <span id="eye" class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+        <input type="password" id="inputPasswordAgain" class="form-control pass" placeholder="再次输入密码" name="password" required>
         <button class="btn btn-lg btn-primary btn-block" type="submit" disabled>注册</button>
     </form>
 
@@ -77,9 +86,29 @@
             $('button').attr("disabled",true)
         }
     })
-    $('#inputPasswordAgain').on('focus',function(){
+    $('#inputPasswordAgain').keyup(function(){
+        var one=$('#inputPassword').val();
+        var two=$('#inputPasswordAgain').val();
+        if(one===two){
+            $('button').attr("disabled",false)
+        }else{
+            $('button').attr("disabled",true)
+        }
+    });
 
-    })
+
+    $(function(){
+        $("#eye").mousedown(function(){
+            $(".pass").attr("type", "text");
+            $(this).toggleClass('glyphicon glyphicon-eye-close')
+            $(this).toggleClass('glyphicon glyphicon-eye-open')
+        });
+        $("#eye").mouseup(function(){
+            $(".pass").attr("type", "password");
+            $(this).toggleClass('glyphicon glyphicon-eye-open')
+            $(this).toggleClass('glyphicon glyphicon-eye-close')
+        });
+    });
 </script>
 </body>
 </html>
