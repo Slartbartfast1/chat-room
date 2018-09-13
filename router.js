@@ -1,10 +1,12 @@
 var express = require('express')
 var Users = require('./models/user.js')
-var md5=require('blueimp-md5')
+var md5 = require('blueimp-md5')
+var session = require('express-session')
 
 var router = express.Router();
 //首页
 router.get('/', function (req, res) {
+    console.log(req.session.user);
     res.sendFile(__dirname + '/index.html');
 });
 
@@ -13,7 +15,7 @@ router.get('/signup', function (req, res) {
     res.sendFile(__dirname + '/signup.html');
 });
 router.post('/signup', function (req, res) {
-    var body = req.body;
+    let body = req.body;
     Users.findOne({
         $or: [{
             userid: body.userid,
@@ -34,11 +36,16 @@ router.post('/signup', function (req, res) {
                 message: "email or username exits"
             })
         }
-        body.password=md5(md5(body.password))
+        //密码加密
+        body.password = md5(md5(body.password))
+
         new Users(body).save(function (err, user) {
             if (err) {
-                return res.status(500).json({success: false, message: "服务器错误"})
+                return res.status(500).json({success: false, message: "Server Error"})
             }
+
+            //注册成功session
+            req.session.user = user;
             res.status(200).json({
                 err_code: 0,
                 message: "success"
@@ -55,8 +62,38 @@ router.get('/signin', function (req, res) {
     res.sendFile(__dirname + '/signin.html');
 });
 
-// router.post('/signin',function(){
-//
-// });
+router.post('/signin',function(req,res){
+    let body=req.body
+    Users.findOne({
+        userid:body.userid,
+        password:md5(md5(bbody.password))
+    },function(err,user){
+        if(err){
+            return res.status(500).json({
+                err_code:500,
+                message:err.message
+            })
+        }
+
+        if(!user) {
+            return res.status(200).json({
+                err_code: 1,
+                message: 'Email or password is invalid'
+            })
+        }
+        req.session.user=user;
+
+        res.status(200).json({
+            err_code:0,
+            message:'success'
+        })
+    })
+});
+
+router.get('/signout',function(err,res){
+    req.session.user=null;
+    res.redirect('/login')
+})
+
 
 module.exports = router;
