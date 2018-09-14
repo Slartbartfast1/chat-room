@@ -13,8 +13,9 @@
         }
         .side{
             height:750px;
-            background-color: yellow;
+            background-color: #FFF;
             padding:10px;
+            border:1px solid rgba(0,0,0,.1)
         }
         .roomID{
             position: relative;
@@ -49,7 +50,7 @@
             float: left;
             width: 50px;
             height:50px;
-            background-color: yellow;
+
         }
         .avatar img{
             height:100%;
@@ -204,6 +205,7 @@
         socket.on('connect', function () {
             socket.emit('join',nickName);
         });
+
         socket.on('sys',function(info,roomInfo){
 
             $('.contentBox').append($('<kbd class="info">').text(info));
