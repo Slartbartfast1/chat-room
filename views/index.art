@@ -8,7 +8,6 @@
         .main{
             height:750px;
             position:relative;
-
         }
         .side{
             height:750px;
@@ -29,7 +28,6 @@
             overflow-y:auto;
         }
         .inputBox{
-
             position:absolute;
             bottom: 0;
         }
@@ -39,10 +37,7 @@
             bottom:10px;
         }
         .msg{
-
-
-            margin:0 auto
-
+            margin:0 auto;
         }
         .avatar{
             border-radius: 1px;
@@ -174,20 +169,20 @@
     var splited = url.split('/');
     var roomID = splited[splited.length - 1];
     $(function () {
-        var nickName=$('.myName').text().slice(5)
+         var nickName1=$('.myName').text().slice(5)
         var socket = io();
         $('form').submit(function(){
-            socket.emit('chat message', $('#m').val());
+            socket.emit('chat message', $('#m').val(),nickName1);
             $('textarea').val('');
             return false;
         });
-        socket.on('chat message', function(msg){
+        socket.on('chat message', function(msg,nickName){
             var html1="<div class=\"msg\">\n" +
                 "        <div class=\"avatar\">\n" +
                 "            <img src=\"https://www.slartbartfast.cn/admin/avatar/default.png\" alt=\"avatar\">\n" +
                 "        </div>\n" +
                 "          <div class=\"username\"><kbd>"
-            var nickName=$('.myName').text().slice(5)
+
             var html2=
             "</kbd> <kbd>"
             var time=new Date().toLocaleString();
@@ -199,14 +194,15 @@
                 "      </div>"
             $('#messages').append(html1+nickName+html2+time+html3+msg+html4);
             $(".contentBox")[0].scrollTop = $(".contentBox")[0].scrollHeight;
+
         });
 
         socket.on('connect', function () {
-            socket.emit('join',nickName);
+            socket.emit('join',nickName1);
+
         });
 
         socket.on('sys',function(info,roomInfo){
-
             $('.contentBox').append($('<kbd class="info">').text(info));
             for(let k =0;k<roomInfo.length;k++)
             {
@@ -215,13 +211,12 @@
         })
     });
 
-
-</script>
-<script>
+    //进入房间
     $('#room').on('keyup',function(){
         $('#goRoom').attr("href",$('#room').val())
     })
     $('.roomID').text('房间号:'+roomID)
+
 </script>
 </body>
 </html>
