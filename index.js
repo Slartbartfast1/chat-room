@@ -22,7 +22,7 @@ var roomInfo = {}
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-
+var user=''
 
 io.on('connection',function(socket){
     var url = socket.request.headers.referer;
@@ -31,6 +31,7 @@ io.on('connection',function(socket){
 
     socket.on('join', function (nickName) {
         user = nickName;
+
         // 将用户昵称加入房间名单中
         if (!roomInfo[roomID]) {
             roomInfo[roomID] = [];
@@ -40,15 +41,19 @@ io.on('connection',function(socket){
         }
 
 
-        socket.join(roomID);    // 加入房间
+        // 加入房间
+        socket.join(roomID);
         // 通知房间内人员
         io.to(roomID).emit('sys', user + '加入了房间', roomInfo[roomID]);
         console.log(user + '加入了' + roomID,roomInfo[roomID]);
     });
-    socket.on('chat message', function (msg) {
-        var room = Object.keys(socket.rooms)[1]; //这是当前socket的房间
-        io.to(room).emit('chat message', msg);
+
+    socket.on('chat message', function (msg,username) {
+
+        var room = Object.keys(socket.rooms)[0]; //这是当前socket的房间
+        io.to(room).emit('chat message',msg,username);
     })
+
 
     //失去连接
     socket.on('leave', function () {
@@ -61,7 +66,6 @@ io.on('connection',function(socket){
         if (index !== -1) {
             roomInfo[roomID].splice(index, 1);
         }
-
         socket.leave(roomID);    // 退出房间
         io.to(roomID).emit('sys', user + '退出了房间', roomInfo[roomID]);
         console.log(user + '退出了' + roomID);
