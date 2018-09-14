@@ -23,11 +23,11 @@ var roomInfo = {}
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+
 io.on('connection',function(socket){
     var url = socket.request.headers.referer;
     var splited = url.split('/');
     var roomID = splited[splited.length - 1];// 获取房间ID
-
 
     socket.on('join', function (nickName) {
         user = nickName;
