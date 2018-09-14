@@ -5,10 +5,30 @@ var session = require('express-session')
 
 var router = express.Router();
 //首页
-router.get('/', function (req, res) {
+
+router.get('/', function (req,res) {
+
+    var data=req.session.user
     console.log(req.session.user);
-    res.sendFile(__dirname + '/index.html');
+    res.render('index.art',{
+                    user:{
+                        username:data.username,
+                        avatar:data.avatar,
+
+                    }
+                });
 });
+
+router.get(/\d+/,function(req,res){
+    var data=req.session.user
+    console.log(req.session.user);
+    res.render('index.art',{
+        user:{
+            username:data.username,
+            avatar:data.avatar,
+        }
+    });
+})
 
 //注册
 router.get('/signup', function (req, res) {
@@ -46,6 +66,7 @@ router.post('/signup', function (req, res) {
 
             //注册成功session
             req.session.user = user;
+            ;
             res.status(200).json({
                 err_code: 0,
                 message: "success"
@@ -61,12 +82,11 @@ router.post('/signup', function (req, res) {
 router.get('/signin', function (req, res) {
     res.sendFile(__dirname + '/signin.html');
 });
-
 router.post('/signin',function(req,res){
     let body=req.body
     Users.findOne({
         userid:body.userid,
-        password:md5(md5(bbody.password))
+        password:md5(md5(body.password))
     },function(err,user){
         if(err){
             return res.status(500).json({
@@ -92,6 +112,7 @@ router.post('/signin',function(req,res){
 
 router.get('/signout',function(err,res){
     req.session.user=null;
+
     res.redirect('/login')
 })
 
