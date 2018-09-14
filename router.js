@@ -7,21 +7,14 @@ var router = express.Router();
 //首页
 
 router.get('/', function (req,res) {
-
-    var data=req.session.user
-    console.log(req.session.user);
-    res.render('index.art',{
-                    user:{
-                        username:data.username,
-                        avatar:data.avatar,
-
-                    }
-                });
+    res.sendFile(__dirname + '/signin.html');
 });
 
 router.get(/\d+/,function(req,res){
     var data=req.session.user
-    console.log(req.session.user);
+    if(!data){
+        return res.sendFile(__dirname + '/signin.html');
+    }
     res.render('index.art',{
         user:{
             username:data.username,
@@ -102,18 +95,18 @@ router.post('/signin',function(req,res){
             })
         }
         req.session.user=user;
-
         res.status(200).json({
             err_code:0,
             message:'success'
         })
+
+
     })
 });
 
-router.get('/signout',function(err,res){
+router.get('/signout',function(req,res){
     req.session.user=null;
-
-    res.redirect('/login')
+    res.redirect('/signin')
 })
 
 
