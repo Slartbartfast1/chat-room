@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>聊天室</title>
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+
+        .main{
+            height:750px;
+            position:relative;
+
+        }
+        .side{
+            height:750px;
+            background-color: yellow;
+            padding:10px;
+        }
+        .roomID{
+            position: relative;
+            left:50%;
+            margin-left:-30px;
+        }
+        .contentBox{
+            padding:10px;
+            height:600px;
+            background-color: #F2F0F1;
+            margin-bottom: 30px;
+            overflow-y:auto;
+        }
+        .inputBox{
+
+            position:absolute;
+            bottom: 0;
+        }
+        .send{
+            position:absolute;
+            right:30px;
+            bottom:10px;
+        }
+        .msg{
+
+
+            margin:0 auto
+
+        }
+        .avatar{
+            border-radius: 1px;
+            float: left;
+            width: 50px;
+            height:50px;
+            background-color: yellow;
+        }
+        .avatar img{
+            height:100%;
+            width: 100%;
+        }
+        .username{
+            margin-left:60px;
+            font-size: 15px;
+            line-height: 15px;
+        }
+        .msgContent{
+            border-radius: 3px;
+            margin-top:5px;
+            margin-left:60px;
+            background-color: white;
+            position: relative;
+            padding:5px;
+        }
+        .msgContent::after{
+            position: absolute;
+            content:'';
+            width: 0;
+            height: 0;
+            border-bottom: 10px solid transparent;
+            border-left: 10px solid transparent;
+            border-top: 10px solid transparent;
+            border-right: 10px solid white;
+            left:-20px;
+            top: 3px;
+        }
+        kbd{
+            background-color: #DDD;
+        }
+        .me{
+
+            padding: 5px;
+
+            width:100%;
+            background-color:white;
+        }
+        .me img{
+            display: block;
+            height:250px;
+            width: 100%;
+        }
+        .myName{
+            margin:0 auto;
+        }
+
+        .list{
+            margin-top:20px;
+            width:100%;
+            height:400px;
+            background-color: #FFF;
+            overflow: auto;
+        }
+        .info{
+            position:relative;
+            left:50px;
+            bottom: 5px;
+            display: block;
+            width: 200px;
+            overflow: auto;
+            margin:10px;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="container">
+<div class="row">
+<div class="main col-lg-9">
+    <div class="contentBox" id="messages">
+        <kbd class="roomID"></kbd>
+    </div>
+    <div class="row">
+    <div class="inputBox col-12">
+        <form action="">
+            <textarea class="form-control" name="" id="m" cols="" rows="6" required></textarea>
+            <button class="btn btn-info send" type="submit">Send</button>
+        </form>
+    </div>
+    </div>
+</div>
+    <div class="side col-lg-3">
+        <div class="input-group mb-3 ">
+            <input type="text" class="form-control" placeholder="房间号" id="room">
+            <div class="input-group-append">
+                <a href="" id="goRoom"><button class="btn btn-success" type="button">Go</button></a>
+            </div>
+        </div>
+        <div class="me">
+            <img src="{{user.avatar}}" alt="avatar">
+            <div class="myName">我的昵称:{{user.username}}</div>
+        </div>
+        <div class="list">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>房间内</th>
+                </tr>
+                </thead>
+                <tbody class="roomUsers">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io();
+</script>
+<script>
+    var url = window.location.href;
+    var splited = url.split('/');
+    var roomID = splited[splited.length - 1];
+    $(function () {
+        var nickName=$('.myName').text().slice(5)
+        var socket = io();
+        $('form').submit(function(){
+            socket.emit('chat message', $('#m').val());
+            $('textarea').val('');
+            return false;
+        });
+        socket.on('chat message', function(msg){
+            var html1="<div class=\"msg\">\n" +
+                "        <div class=\"avatar\">\n" +
+                "            <img src=\"https://www.slartbartfast.cn/admin/avatar/default.png\" alt=\"avatar\">\n" +
+                "        </div>\n" +
+                "          <div class=\"username\"><kbd>"
+            var nickName=$('.myName').text().slice(5)
+            var html2=
+            "</kbd> <kbd>"
+            var time=new Date().toLocaleString();
+                var html3="</kbd></div>\n" +
+                "          <div class=\"msgContent\">\n" +
+                "            <p>";
+            var html4="</p>\n" +
+                "          </div>\n" +
+                "      </div>"
+            $('#messages').append(html1+nickName+html2+time+html3+msg+html4);
+            $(".contentBox")[0].scrollTop = $(".contentBox")[0].scrollHeight;
+        });
+
+        socket.on('connect', function () {
+            socket.emit('join',nickName);
+        });
+        socket.on('sys',function(info,roomInfo){
+
+            $('.contentBox').append($('<kbd class="info">').text(info));
+            for(let k =0;k<roomInfo.length;k++)
+            {
+                $('.roomUsers').append($('<tr>')).append($('<td>').text(roomInfo[k]));
+            }
+        })
+    });
+
+
+</script>
+<script>
+    $('#room').on('keyup',function(){
+        $('#goRoom').attr("href",$('#room').val())
+    })
+    $('.roomID').text('房间号:'+roomID)
+</script>
+</body>
+</html>
