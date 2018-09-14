@@ -5,7 +5,6 @@
     <title>聊天室</title>
     <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
     <style>
-
         .main{
             height:750px;
             position:relative;
@@ -20,7 +19,7 @@
         .roomID{
             position: relative;
             left:50%;
-            margin-left:-30px;
+            margin-left:-50px;
         }
         .contentBox{
             padding:10px;
@@ -125,7 +124,7 @@
 <div class="row">
 <div class="main col-lg-9">
     <div class="contentBox" id="messages">
-        <kbd class="roomID"></kbd>
+        <kbd class="roomID text-center"></kbd>
     </div>
     <div class="row">
     <div class="inputBox col-12">
