@@ -103,7 +103,7 @@
         .list{
             margin-top:20px;
             width:100%;
-            height:400px;
+            height:300px;
             background-color: #FFF;
             overflow: auto;
         }
@@ -138,14 +138,14 @@
 </div>
     <div class="side col-lg-3">
         <div class="input-group mb-3 ">
-            <input type="text" class="form-control" placeholder="房间号" id="room">
+            <input  class="form-control" placeholder="房间号" type="number" id="room">
             <div class="input-group-append">
                 <a href="" id="goRoom"><button class="btn btn-success" type="button">Go</button></a>
             </div>
         </div>
         <div class="me">
             <img src="{{user.avatar}}" alt="avatar">
-            <div class="myName">我的昵称:{{user.username}}</div>
+            <div class="myName">我的昵称:{{user.username}}</div><a href="/signout">退出登录</a>
         </div>
         <div class="list">
             <table class="table">
