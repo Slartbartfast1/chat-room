@@ -50,7 +50,7 @@ io.on('connection',function(socket){
 
     socket.on('chat message', function (msg,username) {
 
-        var room = Object.keys(socket.rooms)[0]; //这是当前socket的房间
+        var room = Object.keys(socket.rooms)[0]; //当前socket的房间
         io.to(room).emit('chat message',msg,username);
     })
 
