@@ -176,6 +176,7 @@
             $('textarea').val('');
             return false;
         });
+
         socket.on('chat message', function(msg,nickName){
             var html1="<div class=\"msg\">\n" +
                 "        <div class=\"avatar\">\n" +
@@ -211,7 +212,7 @@
         })
     });
 
-    //进入房间
+    //输入房间号
     $('#room').on('keyup',function(){
         $('#goRoom').attr("href",$('#room').val())
     })

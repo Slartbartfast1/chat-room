@@ -40,7 +40,6 @@ io.on('connection',function(socket){
             roomInfo[roomID].push(user);
         }
 
-
         // 加入房间
         socket.join(roomID);
         // 通知房间内人员
